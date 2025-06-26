@@ -48,6 +48,7 @@ connectDB();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  cache: "bounded",
   context: ({ req }) => {
     // Add any authentication logic here if needed
     return { req };
