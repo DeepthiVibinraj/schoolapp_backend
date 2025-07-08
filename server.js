@@ -100,16 +100,46 @@ const resolvers = [
   timeTableResolver,
 ];
 
-// Create Apollo Server
+// // Create Apollo Server
+// const admin = require("./firebaseAdmin");
+// const server = new ApolloServer({
+//   typeDefs,
+//   resolvers,
+//   cache: "bounded",
+//   context: ({ req }) => {
+//     return { req };
+//   },
+//   cors: {
+//     origin: "*", // Allow all origins (for development only)
+//     credentials: true,
+//   },
+// });
+const admin = require("./firebase_admin");
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  introspection: true,
   cache: "bounded",
-  context: ({ req }) => {
-    return { req };
+  context: async ({ req }) => {
+    const token = req.headers.authorization?.split("Bearer ")[1];
+
+    if (!token) {
+      throw new Error("Unauthorized: No token provided");
+    }
+
+    try {
+      const decodedToken = await admin.auth().verifyIdToken(token);
+      const uid = decodedToken.uid;
+
+      return { uid, decodedToken }; // You can now access `uid` inside resolvers
+    } catch (err) {
+      console.error("Token verification failed:", err);
+      throw new Error("Unauthorized: Invalid token");
+    }
   },
   cors: {
-    origin: "*", // Allow all origins (for development only)
+    origin: "*",
     credentials: true,
   },
 });

@@ -2,13 +2,28 @@ const Student = require("../models/student");
 
 const studentResolver = {
   Query: {
-    getStudents: async () => {
+    // getStudents: async () => {
+    //   try {
+    //     return await Student.find();
+    //   } catch (error) {
+    //     throw new Error("Failed to fetch students");
+    //   }
+    // },
+    getStudents: async (parent, args, context) => {
       try {
+        if (!context.uid) {
+          throw new Error("Unauthorized access. Please login.");
+        }
+
+        // You can log or use uid if needed
+        console.log("Request made by UID:", context.uid);
+
         return await Student.find();
       } catch (error) {
         throw new Error("Failed to fetch students");
       }
     },
+
     getStudentById: async (_, { id }) => {
       try {
         return await Student.findById(id);
