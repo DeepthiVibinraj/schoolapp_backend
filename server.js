@@ -75,6 +75,8 @@ const classTypeDef = require("./graphql/typedefs/classTypeDef");
 const classResolver = require("./graphql/resolvers/classResolver");
 const timeTableTypeDef = require("./graphql/typedefs/timeTableTypeDef");
 const timeTableResolver = require("./graphql/resolvers/timeTableResolver");
+const homeworkTypeDef = require("./graphql/typedefs/homeworkTypeDef");
+const homeworkResolver = require("./graphql/resolvers/homeworkResolver");
 
 // Load environment variables
 dotenv.config();
@@ -89,6 +91,7 @@ const typeDefs = [
   subjectTypeDef,
   classTypeDef,
   timeTableTypeDef,
+  homeworkTypeDef,
 ];
 
 const resolvers = [
@@ -98,6 +101,7 @@ const resolvers = [
   subjectResolver,
   classResolver,
   timeTableResolver,
+  homeworkResolver,
 ];
 
 // // Create Apollo Server
