@@ -118,35 +118,72 @@ const resolvers = [
 //     credentials: true,
 //   },
 // });
-const admin = require("./firebase_admin");
 
+// const admin = require("./firebase_admin");
+
+// const server = new ApolloServer({
+//   typeDefs,
+//   resolvers,
+//   introspection: true,
+//   cache: "bounded",
+//   context: async ({ req }) => {
+//     const token = req.headers.authorization?.split("Bearer ")[1];
+
+//     if (!token) {
+//       throw new Error("Unauthorized: No token provided");
+//     }
+
+//     try {
+//       const decodedToken = await admin.auth().verifyIdToken(token);
+//       const uid = decodedToken.uid;
+
+//       return { uid, decodedToken }; // You can now access `uid` inside resolvers
+//     } catch (err) {
+//       console.error("Token verification failed:", err);
+//       throw new Error("Unauthorized: Invalid token");
+//     }
+//   },
+//   cors: {
+//     origin: "*",
+//     credentials: true,
+//   },
+// });
+//const admin = require("firebase-admin");
+const admin = require("./firebase_admin");
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  introspection: true,
-  cache: "bounded",
   context: async ({ req }) => {
-    const token = req.headers.authorization?.split("Bearer ")[1];
-
-    if (!token) {
-      throw new Error("Unauthorized: No token provided");
-    }
+    const token = req.headers.authorization || "";
 
     try {
-      const decodedToken = await admin.auth().verifyIdToken(token);
-      const uid = decodedToken.uid;
-
-      return { uid, decodedToken }; // You can now access `uid` inside resolvers
-    } catch (err) {
-      console.error("Token verification failed:", err);
-      throw new Error("Unauthorized: Invalid token");
+      if (token.startsWith("Bearer ")) {
+        const idToken = token.split("Bearer ")[1];
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        return { uid: decodedToken.uid }; // Pass uid here
+      }
+    } catch (error) {
+      console.log("Invalid token:", error);
+      // Optionally throw or return context without uid
     }
-  },
-  cors: {
-    origin: "*",
-    credentials: true,
+    return {};
   },
 });
+
+// const admin = require("./firebase_admin");
+
+// const server = new ApolloServer({
+//   typeDefs,
+//   resolvers,
+//   context: async ({ req }) => {
+//     const authHeader = req.headers.authorization || "";
+//     const token = authHeader.split("Bearer ")[1];
+//     if (!token) throw new Error("Unauthorized: No token provided");
+
+//     const decodedToken = await admin.auth().verifyIdToken(token);
+//     return { user: decodedToken };
+//   },
+// });
 
 // Start the server
 server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {

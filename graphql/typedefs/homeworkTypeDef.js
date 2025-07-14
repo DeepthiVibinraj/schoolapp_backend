@@ -19,6 +19,7 @@ const homeworkTypeDef = gql`
 
   type Query {
     getHomework: [Homework!]!
+    getHomeworkByClassLevel(classLevel: String!): [Homework!]!
   }
 
   type Mutation {
