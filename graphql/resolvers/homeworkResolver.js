@@ -97,7 +97,7 @@
 
 const Homework = require("../models/homework");
 const Student = require("../models/student");
-const { sendPushNotification } = require("../utils/fcmservice");
+const { sendPushNotification } = require("../utils/fcmService");
 
 const homeworkResolver = {
   Query: {
