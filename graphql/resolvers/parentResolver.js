@@ -1,21 +1,21 @@
 const Parent = require("./models/parent");
-const { sendPushNotification } = require("../utils/fcmService");
+//const { sendPushNotification } = require("../utils/fcmService");
 
 const parentResolver = {
   Mutation: {
-    saveParentFcmToken: async (_, { studentId, token }) => {
-      // Find parents whose children array includes studentId
-      const parents = await Parent.find({ children: studentId });
+    // saveParentFcmToken: async (_, { studentId, token }) => {
+    //   // Find parents whose children array includes studentId
+    //   const parents = await Parent.find({ children: studentId });
 
-      for (const parent of parents) {
-        if (!parent.fcmTokens.includes(token)) {
-          parent.fcmTokens.push(token);
-          await parent.save();
-        }
-      }
+    //   for (const parent of parents) {
+    //     if (!parent.fcmTokens.includes(token)) {
+    //       parent.fcmTokens.push(token);
+    //       await parent.save();
+    //     }
+    //   }
 
-      return true;
-    },
+    //   return true;
+    // },
 
     // Existing addHomework resolver
     addHomework: async (_, { input }) => {
