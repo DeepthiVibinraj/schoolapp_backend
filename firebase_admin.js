@@ -52,6 +52,7 @@
 // }
 
 // module.exports = admin;
+const admin = require("firebase-admin");
 if (!admin.apps.length) {
   if (process.env.NODE_ENV === "production") {
     const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
