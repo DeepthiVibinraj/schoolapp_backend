@@ -51,20 +51,14 @@
 //   });
 // }
 
-// module.exports = admin;
+// module.exports = admin;// firebase_admin.js
 const admin = require("firebase-admin");
+const serviceAccount = require("./firebase-service-account.json");
+
 if (!admin.apps.length) {
-  if (process.env.NODE_ENV === "production") {
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-    });
-  } else {
-    const serviceAccount = require("./firebase-service-account.json");
-
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-    });
-  }
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
 }
+
+module.exports = admin;
