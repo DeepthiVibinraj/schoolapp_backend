@@ -210,7 +210,14 @@ const homeworkResolver = {
           },
         });
       } catch (error) {
-        console.error("❌ Error sending FCM notification:", error);
+        //console.error("❌ Error sending FCM notification:", error);
+        console.error("❌ Error sending FCM notification:");
+        if (error.response) {
+          console.error("Status:", error.response.status);
+          console.error("Data:", error.response.data);
+        } else {
+          console.error("Message:", error.message);
+        }
       }
 
       return saved;
