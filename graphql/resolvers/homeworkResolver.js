@@ -174,16 +174,45 @@ const homeworkResolver = {
       await Homework.find({ classLevel }),
   },
   Mutation: {
+    // addHomework: async (_, { classLevel, subjectHomeworks }) => {
+    //   const newHomework = new Homework({ classLevel, subjectHomeworks });
+    //   const saved = await newHomework.save();
+    //   await admin.messaging().send({
+    //     topic: `class-${classLevel}`,
+    //     notification: {
+    //       title: "📚 New Homework Assigned",
+    //       body: `New homework for class ${classLevel}`,
+    //     },
+    //   });
+    //   return saved;
+    // },
     addHomework: async (_, { classLevel, subjectHomeworks }) => {
       const newHomework = new Homework({ classLevel, subjectHomeworks });
       const saved = await newHomework.save();
-      await admin.messaging().send({
-        topic: `class-${classLevel}`,
-        notification: {
-          title: "📚 New Homework Assigned",
-          body: `New homework for class ${classLevel}`,
-        },
-      });
+
+      // Sending notification to topic: class-<classLevel>
+      try {
+        await admin.messaging().send({
+          topic: `class-${classLevel}`, // Make sure topic is like: "class-5A"
+          notification: {
+            title: "📚 New Homework Assigned",
+            body: `New homework posted for Class ${classLevel}`,
+          },
+          android: {
+            priority: "high",
+          },
+          apns: {
+            payload: {
+              aps: {
+                sound: "default",
+              },
+            },
+          },
+        });
+      } catch (error) {
+        console.error("❌ Error sending FCM notification:", error);
+      }
+
       return saved;
     },
     deleteHomework: async (_, { id }) =>

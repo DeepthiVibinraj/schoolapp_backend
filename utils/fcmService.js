@@ -86,3 +86,33 @@
 // }
 
 // module.exports = { sendPushNotification };
+
+// utils/notificationSender.js
+const axios = require("axios");
+
+const sendTopicNotification = async (topic, title, body) => {
+  try {
+    await axios.post(
+      "https://fcm.googleapis.com/fcm/send",
+      {
+        to: `/topics/${topic}`, // like /topics/class1
+        notification: {
+          title: title,
+          body: body,
+        },
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `key=${process.env.FCM_SERVER_KEY}`, // Your FCM Server Key
+        },
+      }
+    );
+
+    console.log(`Notification sent to topic: ${topic}`);
+  } catch (error) {
+    console.error("Error sending notification:", error.message);
+  }
+};
+
+module.exports = { sendTopicNotification };
