@@ -87,31 +87,92 @@
 
 // module.exports = { sendPushNotification };
 
-// utils/notificationSender.js
-const axios = require("axios");
+// // utils/notificationSender.js
+//
+//
+//
+//
+//
 
+// const axios = require("axios");
+
+// const sendTopicNotification = async (topic, title, body) => {
+//   try {
+//     await axios.post(
+//       "https://fcm.googleapis.com/v1/projects/schoolapp-7e694/messages:send",
+//       {
+//         to: `/topics/${topic}`, // like /topics/class1
+//         notification: {
+//           title: title,
+//           body: body,
+//         },
+//       },
+//       {
+//         headers: {
+//           "Content-Type": "application/json",
+//           // Authorization: `key=${process.env.FCM_SERVER_KEY}`, // Your FCM Server Key
+//           Authorization: Bearer YOUR_OAUTH2_ACCESS_TOKEN
+
+//         },
+//       }
+//     );
+
+//     console.log(`Notification sent to topic: ${topic}`);
+//   } catch (error) {
+//     console.error("Error sending notification:", error.message);
+//   }
+// };
+
+// module.exports = { sendTopicNotification };
+//
+//
+//
+const axios = require("axios");
+const { google } = require("google-auth-library");
+const path = require("path");
+
+// 🔐 Get OAuth2 Access Token using service account
+async function getAccessToken() {
+  const auth = new google.auth.GoogleAuth({
+    keyFile: path.join(__dirname, "../firebase-service-account.json"), // ✅ Adjust path to your JSON file
+    scopes: ["https://www.googleapis.com/auth/firebase.messaging"],
+  });
+
+  const client = await auth.getClient();
+  const accessTokenResponse = await client.getAccessToken();
+  return accessTokenResponse.token;
+}
+
+// 📢 Send notification to topic (e.g., class-1)
 const sendTopicNotification = async (topic, title, body) => {
   try {
+    const accessToken = await getAccessToken();
+
     await axios.post(
-      "https://fcm.googleapis.com/fcm/send",
+      "https://fcm.googleapis.com/v1/projects/schoolapp-7e694/messages:send", // 🔁 Replace with your real project ID
       {
-        to: `/topics/${topic}`, // like /topics/class1
-        notification: {
-          title: title,
-          body: body,
+        message: {
+          topic: topic,
+          notification: {
+            title: title,
+            body: body,
+          },
         },
       },
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `key=${process.env.FCM_SERVER_KEY}`, // Your FCM Server Key
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
 
-    console.log(`Notification sent to topic: ${topic}`);
+    console.log(`✅ Notification sent to topic: ${topic}`);
   } catch (error) {
-    console.error("Error sending notification:", error.message);
+    console.error(
+      "❌ Error sending notification:",
+      error.response?.data || error.message
+    );
   }
 };
 
