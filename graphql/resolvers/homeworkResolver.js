@@ -212,12 +212,21 @@ const homeworkResolver = {
       } catch (error) {
         //console.error("❌ Error sending FCM notification:", error);
         console.error("❌ Error sending FCM notification:");
+
+        // Case 1: Axios-like errors
         if (error.response) {
           console.error("Status:", error.response.status);
           console.error("Data:", error.response.data);
-        } else {
+        }
+
+        // Case 2: Firebase admin SDK errors or others
+        if (error.code || error.message) {
+          console.error("Code:", error.code);
           console.error("Message:", error.message);
         }
+
+        // Case 3: Unknown error
+        console.error("Full error object:", error);
       }
 
       return saved;
