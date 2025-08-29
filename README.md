@@ -4,7 +4,7 @@ This project is developed using Flutter for both Admin and Parent applications, 
 
 Admin App: - Allowed the addition, updating, and deletion of students, teachers, classes, subjects and timetables. - Integrated backend with GraphQL for efficient CRUD operations and data retrieval.
 
-<img src="../screenshots/admin_dashboard.jpg" width="300"/>
+<img src="./screenshots/admin_dashboard.jpg" width="300"/>
 
 Parent App: - Enabled parents to view their child's profile and switch between multiple children. - Provided access to timetable for each child.
 
