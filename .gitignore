@@ -1,0 +1,35 @@
+# 💻 Node.js & Environment files
+/backend/
+**/node_modules/
+**/.env
+.env
+*.log
+/backend/
+**/firebase_options.dart
+**/graphql_config.dart
+school_admin_app/android/app/google-services.json
+pubspec.lock
+school_parent_app/android/app/google-services.json
+firebase-service-account.json
+output.txt
+
+
+
+
+
+# 🛠 IDE & System files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 📦 Dart / Flutter build files
+**/build/
+.dart_tool/
+.packages
+.pub-cache/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# 🔥 Firebase
+firebase-debug.log
